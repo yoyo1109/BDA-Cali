@@ -6,7 +6,8 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "seed:pending": "node scripts/seedPending.js"
   },
   "dependencies": {
     "@react-native-picker/picker": "^2.4.8",
@@ -44,7 +45,9 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9"
+    "@babel/core": "^7.12.9",
+    "firebase-admin": "^11.11.1",
+    "firebase-tools": "^12.9.1"
   },
   "overrides": {
     "react-freeze": "1.0.4"

@@ -44,6 +44,10 @@ const ListScreen = ({ route, navigation }) => {
         }
 
         try {
+            console.log('[Pending] Fetching "pending" donations', {
+                dateFilter,
+                statusFilter,
+            });
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
@@ -67,8 +71,18 @@ const ListScreen = ({ route, navigation }) => {
                 }
             });
             setDonations(forms);
+            console.log('[Pending] Loaded "pending" donations', {
+                count: forms.length,
+            });
         } catch (error) {
-            console.error(error);
+            console.error(
+                '[Pending] Failed to read collection "pending"',
+                {
+                    dateFilter,
+                    statusFilter,
+                },
+                error
+            );
         }
 
         setRefreshing(false);

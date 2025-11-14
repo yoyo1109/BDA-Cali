@@ -18,3 +18,5 @@ keys/
 
 # VSCode
 *.code-workspace
+
+firebase-service-account.json

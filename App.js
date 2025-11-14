@@ -119,13 +119,20 @@ function App() {
         const userQuery = query(users, where('type', '==', 'driver'));
 
         try {
+            console.log('[Auth] Loading driver list from Firestore');
             const querySnapshot = await getDocs(userQuery);
             querySnapshot.forEach((doc) => {
                 tempDrivers.push({ uid: doc.id, data: doc.data() });
             });
+            console.log('[Auth] Loaded driver list', {
+                driverCount: tempDrivers.length,
+            });
             dispatch(setDrivers(tempDrivers));
         } catch (error) {
-            console.error(error.message);
+            console.error(
+                '[Auth] Failed to load drivers collection "users"',
+                error
+            );
         }
     };
 
@@ -133,20 +140,36 @@ function App() {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
                 setLoading(true);
+                console.log('[Auth] Auth state change detected', {
+                    uid: user.uid,
+                });
                 getDoc(doc(db, 'users', user.uid))
                     .then((userSnap) => {
                         const userData = userSnap.data();
+                        console.log('[Auth] User profile loaded', {
+                            uid: user.uid,
+                            type: userData?.type,
+                        });
                         if (
                             userData.type === 'admin' ||
                             userData.type === 'warehouse'
                         ) {
+                            console.log(
+                                '[Auth] User requires driver list preload'
+                            );
                             saveDrivers();
                         }
                         dispatch(setUser([user.uid, userData]));
                         setLoggedIn(true);
                     })
                     .catch((error) => {
-                        console.error(error);
+                        console.error(
+                            '[Auth] Failed to read user document "users"',
+                            {
+                                uid: user.uid,
+                            },
+                            error
+                        );
                     })
                     .finally(() => {
                         setLoading(false);

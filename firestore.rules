@@ -1,0 +1,51 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function userRole() {
+      return isSignedIn()
+        ? get(/databases/$(database)/documents/users/$(request.auth.uid)).data.type
+        : null;
+    }
+
+    function isAdmin() {
+      return userRole() == 'admin';
+    }
+
+    function isWarehouse() {
+      return userRole() == 'warehouse';
+    }
+
+    function isDriver() {
+      return userRole() == 'driver';
+    }
+
+    function isAdminOrWarehouse() {
+      return isAdmin() || isWarehouse();
+    }
+
+    match /users/{uid} {
+      allow read: if isSignedIn() && (request.auth.uid == uid || isAdminOrWarehouse());
+      allow create: if isSignedIn() && isAdminOrWarehouse();
+      allow update, delete: if isSignedIn() && (request.auth.uid == uid || isAdminOrWarehouse());
+    }
+
+    match /pending/{docId} {
+      allow read, write: if isAdminOrWarehouse();
+    }
+
+    match /accepted/{docId} {
+      allow read, write: if isAdminOrWarehouse();
+      allow read, update, delete: if isDriver() && resource.data.pickup.driver == request.auth.uid;
+    }
+
+    match /pickedup/{docId} {
+      allow read, write: if isAdminOrWarehouse();
+      allow create: if isDriver() && request.resource.data.pickup.driver == request.auth.uid;
+      allow read: if isDriver() && resource.data.pickup.driver == request.auth.uid;
+    }
+  }
+}
