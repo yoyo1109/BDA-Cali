@@ -1,17 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Platform, LogBox, StyleSheet, View, Image } from 'react-native';
 
-// Firebase
-import { onAuthStateChanged } from 'firebase/auth';
-import {
-    getDoc,
-    doc,
-    getDocs,
-    collection,
-    query,
-    where,
-} from 'firebase/firestore';
-import { auth, db } from './src/firebase/config';
+// Supabase
+import supabase from './src/supabase/client';
 
 // Navigation
 import { NavigationContainer } from '@react-navigation/native';
@@ -113,50 +104,94 @@ function App() {
     }, []);
 
     const saveDrivers = async () => {
-        let tempDrivers = [];
-
-        const users = collection(db, 'users');
-        const userQuery = query(users, where('type', '==', 'driver'));
-
         try {
-            const querySnapshot = await getDocs(userQuery);
-            querySnapshot.forEach((doc) => {
-                tempDrivers.push({ uid: doc.id, data: doc.data() });
-            });
+            const { data, error } = await supabase
+                .from('staff_profiles')
+                .select('*')
+                .eq('role', 'driver');
+            if (error) {
+                throw error;
+            }
+            const tempDrivers = data.map((profile) => ({
+                uid: profile.id,
+                data: profile,
+            }));
             dispatch(setDrivers(tempDrivers));
         } catch (error) {
-            console.error(error.message);
+            console.error(`[saveDrivers] ${error.message}`);
+        }
+    };
+
+    const hydrateUserSession = async (session) => {
+        if (!session?.user) {
+            dispatch(setUser([null, null]));
+            dispatch(setDrivers([]));
+            setLoggedIn(false);
+            setLoading(false);
+            return;
+        }
+
+        try {
+            setLoading(true);
+            const { data, error } = await supabase
+                .from('staff_profiles')
+                .select('*')
+                .eq('id', session.user.id)
+                .maybeSingle();
+
+            if (error) {
+                throw error;
+            }
+
+            // If no profile exists, sign out the user
+            if (!data) {
+                console.error('[hydrateUserSession] No staff profile found for user');
+                await supabase.auth.signOut();
+                dispatch(setUser([null, null]));
+                dispatch(setDrivers([]));
+                setLoggedIn(false);
+                setLoading(false);
+                return;
+            }
+
+            if (['admin', 'warehouse'].includes(data.role)) {
+                await saveDrivers();
+            } else {
+                dispatch(setDrivers([]));
+            }
+            dispatch(setUser([session.user.id, data]));
+            setLoggedIn(true);
+        } catch (error) {
+            console.error('[hydrateUserSession]', error.message);
+            setLoggedIn(false);
+        } finally {
+            setLoading(false);
         }
     };
 
     useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                setLoading(true);
-                getDoc(doc(db, 'users', user.uid))
-                    .then((userSnap) => {
-                        const userData = userSnap.data();
-                        if (
-                            userData.type === 'admin' ||
-                            userData.type === 'warehouse'
-                        ) {
-                            saveDrivers();
-                        }
-                        dispatch(setUser([user.uid, userData]));
-                        setLoggedIn(true);
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    })
-                    .finally(() => {
-                        setLoading(false);
-                    });
-            } else {
-                setLoggedIn(false);
+        let authSubscription;
+
+        const initSession = async () => {
+            setLoading(true);
+            const {
+                data: { session },
+            } = await supabase.auth.getSession();
+            await hydrateUserSession(session);
+        };
+
+        initSession();
+
+        authSubscription = supabase.auth.onAuthStateChange(
+            (_event, session) => {
+                hydrateUserSession(session);
             }
-        });
-        return unsubscribe;
-    }, [auth]);
+        );
+
+        return () => {
+            authSubscription?.data?.subscription?.unsubscribe();
+        };
+    }, []);
 
     if (loading) {
         return (

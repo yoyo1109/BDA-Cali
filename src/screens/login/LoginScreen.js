@@ -6,44 +6,37 @@ import {
     TouchableOpacity,
     View,
     Image,
-    Modal,
     ActivityIndicator,
+    Alert,
 } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
-import { auth, db } from '../../firebase/config';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { doc, getDoc } from 'firebase/firestore';
+import supabase from '../../supabase/client';
 
 const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [modalVisible, setModalVisible] = useState(false);
-    const [modalText, setModalText] = useState('');
     const [loading, setLoading] = useState(false);
     const mounted = useRef(true);
 
-    const handleSignIn = () => {
+    const handleSignIn = async () => {
+        if (loading) {
+            return;
+        }
         setLoading(true);
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                // perform sign-in operations
-                getDoc(doc(db, 'users', userCredential.user.uid))
-                    .then((userSnap) => {
-                        if (!userSnap.exists) {
-                            alert('User does not exist anymore.');
-                            return;
-                        }
-                    })
-                    .catch((error) => {
-                        alert(error);
-                    });
-            })
-            .catch((error) => {
-                alert(error);
+        try {
+            const { error } = await supabase.auth.signInWithPassword({
+                email,
+                password,
             });
-        if (mounted.current) {
-            setLoading(false);
+            if (error) {
+                Alert.alert('Error al iniciar sesión', error.message);
+            }
+        } catch (error) {
+            Alert.alert('Error al iniciar sesión', error.message);
+        } finally {
+            if (mounted.current) {
+                setLoading(false);
+            }
         }
     };
 

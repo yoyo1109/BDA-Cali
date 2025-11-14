@@ -11,11 +11,9 @@ import {
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import React, { useState } from 'react';
-import { db, auth } from '../../../firebase/config';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import supabase from '../../../supabase/client';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { setDoc, doc } from 'firebase/firestore';
 
 const CreateAccountScreen = () => {
     const [email, setEmail] = useState('');
@@ -50,43 +48,66 @@ const CreateAccountScreen = () => {
         return true;
     };
 
-    const createAccount = () => {
+    const createAccount = async () => {
+        if (isLoading) {
+            return;
+        }
         setIsLoading(true);
-        if (inputsValid()) {
-            const pass = generatePassword();
-            createUserWithEmailAndPassword(auth, email, pass)
-                .then(async (userCredential) => {
-                    const user = userCredential.user;
-                    await setDoc(doc(db, 'users', user.uid), {
-                        email: user.email,
-                        name: {
-                            first: firstName,
-                            last1: lastName1,
-                            last2: lastName2 === '' ? null : lastName2,
-                        },
-                        type: accountType,
-                    });
-                    setIsLoading(false);
-                    Alert.alert(
-                        'User created!',
-                        `Type: ${accountType}\nEmail: ${user.email}\nPassword: ${pass}`
-                    );
-                    clearFields();
-                    // auth.currentUser gets changed to the user that was just created here
-                    // we have to make sure that the user stays the same after creation
-                })
-                .catch((error) => {
-                    let errText = '';
-                    if (error.code === 'auth/email-already-in-use') {
-                        errText += 'An account with this email already exists.';
-                    } else if (error.code === 'auth/internal-error') {
-                        errText += 'Something went wrong, please try again.';
-                    } else {
-                        errText += error.code;
-                    }
-                    Alert.alert('Error', errText);
-                    setIsLoading(false);
+
+        if (!inputsValid()) {
+            return;
+        }
+
+        const pass = generatePassword();
+
+        try {
+            const {
+                data: { session: previousSession },
+            } = await supabase.auth.getSession();
+
+            const { data, error } = await supabase.auth.signUp({
+                email,
+                password: pass,
+            });
+
+            if (error) {
+                throw error;
+            }
+
+            const newUser = data.user;
+
+            const { error: profileError } = await supabase.from('staff_profiles').insert({
+                id: newUser.id,
+                email: newUser.email,
+                name: {
+                    first: firstName,
+                    last1: lastName1,
+                    last2: lastName2 === '' ? null : lastName2,
+                },
+                role: accountType,
+            });
+
+            if (profileError) {
+                throw profileError;
+            }
+
+            Alert.alert(
+                '¡Usuario creado!',
+                `Tipo: ${accountType}\nEmail: ${newUser.email}\nContraseña: ${pass}`
+            );
+            clearFields();
+
+            if (data.session && previousSession) {
+                await supabase.auth.setSession({
+                    access_token: previousSession.access_token,
+                    refresh_token: previousSession.refresh_token,
                 });
+            }
+        } catch (error) {
+            const message = error.message ?? 'Algo salió mal, inténtalo nuevamente.';
+            Alert.alert('Error', message);
+        } finally {
+            setIsLoading(false);
         }
     };
 
