@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Platform, LogBox, StyleSheet, View, Image } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 // Firebase
 import { onAuthStateChanged } from 'firebase/auth';
@@ -181,33 +182,43 @@ function App() {
         return unsubscribe;
     }, [auth]);
 
-    if (loading) {
-        return (
-            <View style={styles.container}>
-                <Image
-                    style={styles.logo}
-                    source={require('./assets/bdalogo.png')}
-                />
-            </View>
-        );
-    }
+    const renderContent = () => {
+        if (loading) {
+            return (
+                <View style={styles.container}>
+                    <Image
+                        style={styles.logo}
+                        source={require('./assets/bdalogo.png')}
+                    />
+                </View>
+            );
+        }
 
-    return (
-        <NavigationContainer>
-            {loggedIn ? <HomeScreen /> : <LoginHomeScreen />}
-        </NavigationContainer>
-    );
+        return (
+            <NavigationContainer>
+                {loggedIn ? <HomeScreen /> : <LoginHomeScreen />}
+            </NavigationContainer>
+        );
+    };
+
+    return renderContent();
 }
 
 export default function AppWrapper() {
     return (
-        <Provider store={store}>
-            <App />
-        </Provider>
+        <GestureHandlerRootView style={styles.root}>
+            <Provider store={store}>
+                <App />
+            </Provider>
+        </GestureHandlerRootView>
     );
 }
 
 const styles = StyleSheet.create({
+    root: {
+        flex: 1,
+        backgroundColor: '#fff',
+    },
     container: {
         flex: 1,
         justifyContent: 'center',

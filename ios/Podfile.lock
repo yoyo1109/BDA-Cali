@@ -471,7 +471,7 @@ PODS:
     - React-perflogger (= 0.71.14)
   - RNCPicker (2.4.8):
     - React-Core
-  - RNDateTimePicker (6.7.3):
+  - RNGestureHandler (2.9.0):
     - React-Core
   - RNScreens (3.20.0):
     - React-Core
@@ -541,7 +541,7 @@ DEPENDENCIES:
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
-  - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
+  - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -668,8 +668,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNCPicker:
     :path: "../node_modules/@react-native-picker/picker"
-  RNDateTimePicker:
-    :path: "../node_modules/@react-native-community/datetimepicker"
+  RNGestureHandler:
+    :path: "../node_modules/react-native-gesture-handler"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   RNVectorIcons:
@@ -738,7 +738,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: ffe826b7b1cfbc32a35ed5b64d5886c0ff75f501
   ReactCommon: ce6e3a7ae388a450c1a01a4e8b9fa2309d2a9725
   RNCPicker: a04f825ecc28764441425987e78946032850102d
-  RNDateTimePicker: 371fff9e5ed9d1f998e26e8ff00176c24b0958a5
+  RNGestureHandler: 5fe9e4f847b51d8cc9006cec6c7dc6718dd82809
   RNScreens: c6ae949c292bee8ed7f355ab2adcfc9a51629951
   RNVectorIcons: 167204615c2e614b9c755d2f16cc6b297c97c302
   Yoga: e71803b4c1fff832ccf9b92541e00f9b873119b9

@@ -1,0 +1,11 @@
+diff --git a/node_modules/expo-dev-menu/ios/DevMenuViewController.swift b/node_modules/expo-dev-menu/ios/DevMenuViewController.swift
+index eab69ea..b0b6ade 100644
+--- a/node_modules/expo-dev-menu/ios/DevMenuViewController.swift
++++ b/node_modules/expo-dev-menu/ios/DevMenuViewController.swift
+@@
+-    let isSimulator = TARGET_IPHONE_SIMULATOR > 0
++    #if targetEnvironment(simulator)
++    let isSimulator = true
++    #else
++    let isSimulator = false
++    #endif

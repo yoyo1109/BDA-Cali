@@ -1,0 +1,15 @@
+diff --git a/node_modules/expo-device/ios/UIDevice.swift b/node_modules/expo-device/ios/UIDevice.swift
+index 4f69b29..30f43cf 100644
+--- a/node_modules/expo-device/ios/UIDevice.swift
++++ b/node_modules/expo-device/ios/UIDevice.swift
+@@
+-  var isSimulator: Bool {
+-    return TARGET_OS_SIMULATOR != 0
+-  }
++  var isSimulator: Bool {
++#if targetEnvironment(simulator)
++    return true
++#else
++    return false
++#endif
++  }
