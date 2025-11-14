@@ -75,12 +75,12 @@ const ViewScreen = ({ route, navigation }) => {
 
         if (donation.pickup === undefined) {
             setDriver('');
-            setDriverName('No asignado');
+            setDriverName('Unassigned');
             setPickupDate(null);
         } else {
             if (donation.pickup.driver === undefined) {
                 setDriver('');
-                setDriverName('No asignado');
+                setDriverName('Unassigned');
             } else {
                 setDriver(donation.pickup.driver);
                 setDriverName(donation.pickup.driverName);
@@ -168,18 +168,18 @@ const ViewScreen = ({ route, navigation }) => {
                 <ListItem topDivider bottomDivider>
                     <Icon name='calendar' size={25} />
                     <ListItem.Content>
-                        <ListItem.Title>Fecha de Creacion</ListItem.Title>
+                        <ListItem.Title>Date created</ListItem.Title>
                         <ListItem.Subtitle>
-                            {data.dateCreated.toDate().toLocaleString('es-CO')}
+                            {data.dateCreated.toDate().toLocaleString('en-US')}
                         </ListItem.Subtitle>
                     </ListItem.Content>
                 </ListItem>
                 <ListItem bottomDivider>
                     <Icon name='certificate' size={25} />
                     <ListItem.Content>
-                        <ListItem.Title>¿Certificado requerido?</ListItem.Title>
+                        <ListItem.Title>Certificate required?</ListItem.Title>
                         <ListItem.Subtitle>
-                            {data.donation.taxDeduction ? 'Sí' : 'No'}
+                            {data.donation.taxDeduction ? 'Yes' : 'No'}
                         </ListItem.Subtitle>
                     </ListItem.Content>
                 </ListItem>
@@ -199,7 +199,7 @@ const ViewScreen = ({ route, navigation }) => {
                                 color: driver === '' ? '#df0b37' : 'black',
                             }}
                         >
-                            Conductor
+                            Driver
                         </ListItem.Title>
                         <ListItem.Subtitle>{driverName}</ListItem.Subtitle>
                     </ListItem.Content>
@@ -220,33 +220,34 @@ const ViewScreen = ({ route, navigation }) => {
                                     pickupDate === null ? '#df0b37' : 'black',
                             }}
                         >
-                            Fecha de recogida
+                            Pickup date
                         </ListItem.Title>
                         <ListItem.Subtitle>
                             {pickupDate === null
-                                ? 'No asignado'
-                                : pickupDate.toLocaleDateString('es-CO')}
+                                ? 'Unassigned'
+                                : pickupDate.toLocaleDateString('en-US')}
                         </ListItem.Subtitle>
                     </ListItem.Content>
                     <ListItem.Chevron />
                 </ListItem>
                 <ListItem topDivider bottomDivider>
                     <ListItem.Content>
-                        <ListItem.Title>Tipo</ListItem.Title>
+                        <ListItem.Title>Type</ListItem.Title>
                         <ListItem.Subtitle>
                             {data.client.type === 'indiv'
                                 ? 'Individual'
-                                : 'Organización'}
+                                : 'Organization'}
                         </ListItem.Subtitle>
                     </ListItem.Content>
                 </ListItem>
                 <ListItem bottomDivider>
                     <ListItem.Content>
                         <ListItem.Title>
-                            {'Nombre de ' +
-                                (data.client.type === 'indiv'
+                            {`Name of ${
+                                data.client.type === 'indiv'
                                     ? 'Individual'
-                                    : 'Organización')}
+                                    : 'Organization'
+                            }`}
                         </ListItem.Title>
                         <ListItem.Subtitle>
                             {data.client.type === 'org'
@@ -268,7 +269,7 @@ const ViewScreen = ({ route, navigation }) => {
                     }}
                 >
                     <ListItem.Content>
-                        <ListItem.Title>Dirección</ListItem.Title>
+                        <ListItem.Title>Address</ListItem.Title>
                         <ListItem.Subtitle>
                             {data.client.address.formatted}
                         </ListItem.Subtitle>
@@ -282,16 +283,16 @@ const ViewScreen = ({ route, navigation }) => {
                     style={{ marginTop: 32, marginBottom: 32 }}
                     onPress={() => {
                         Alert.alert(
-                            'Confirmar',
-                            '¿Está seguro de que desea eliminar esta donación? Esto no se puede deshacer.',
+                            'Confirm',
+                            'Are you sure you want to delete this donation? This cannot be undone.',
                             [
                                 {
-                                    text: 'Cancelar',
+                                    text: 'Cancel',
                                     onPress: () => {},
                                     style: 'cancel',
                                 },
                                 {
-                                    text: 'Borrar',
+                                    text: 'Delete',
                                     onPress: () => {
                                         deleteDonation();
                                     },
@@ -303,7 +304,7 @@ const ViewScreen = ({ route, navigation }) => {
                     <Icon name='delete' color='#df0b37' size={25} />
                     <ListItem.Content>
                         <ListItem.Title style={{ color: '#df0b37' }}>
-                            Eliminar
+                            Delete
                         </ListItem.Title>
                     </ListItem.Content>
                 </ListItem>
@@ -312,16 +313,16 @@ const ViewScreen = ({ route, navigation }) => {
                 <TouchableOpacity
                     onPress={() => {
                         Alert.alert(
-                            'Confirmar',
-                            '¿Estás seguro de que quieres enviar esta donación?',
+                            'Confirm',
+                            'Are you sure you want to send this donation?',
                             [
                                 {
-                                    text: 'Cancelar',
+                                    text: 'Cancel',
                                     onPress: () => {},
                                     style: 'cancel',
                                 },
                                 {
-                                    text: 'Entregar',
+                                    text: 'Send',
                                     onPress: () => {
                                         acceptDonation();
                                     },
@@ -338,7 +339,7 @@ const ViewScreen = ({ route, navigation }) => {
                 >
                     {!loading ? (
                         <Text style={styles.acceptButtonText}>
-                            Enviar al conductor
+                            Send to driver
                         </Text>
                     ) : (
                         <ActivityIndicator color='white' />

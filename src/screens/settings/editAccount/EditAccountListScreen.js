@@ -7,16 +7,16 @@ const EditAccountListScreen = ({ navigation }) => {
     const data = useSelector((state) => state.user.data);
 
     const types = {
-        admin: 'Administrador',
-        warehouse: 'Depósito',
-        driver: 'Conductor',
+        admin: 'Administrator',
+        warehouse: 'Warehouse',
+        driver: 'Driver',
     };
 
     return (
         <View>
             <ListItem topDivider bottomDivider>
                 <ListItem.Content>
-                    <ListItem.Title>Nombre</ListItem.Title>
+                    <ListItem.Title>Name</ListItem.Title>
                     <ListItem.Subtitle right>
                         {data.name.first +
                             ' ' +
@@ -29,7 +29,7 @@ const EditAccountListScreen = ({ navigation }) => {
             </ListItem>
             <ListItem bottomDivider>
                 <ListItem.Content>
-                    <ListItem.Title>Tipo de Cuenta</ListItem.Title>
+                    <ListItem.Title>Account Type</ListItem.Title>
                     <ListItem.Subtitle right>
                         {types[data.type]}
                     </ListItem.Subtitle>
@@ -54,7 +54,7 @@ const EditAccountListScreen = ({ navigation }) => {
                 bottomDivider
             >
                 <ListItem.Content>
-                    <ListItem.Title>Cambia la contraseña</ListItem.Title>
+                    <ListItem.Title>Change password</ListItem.Title>
                 </ListItem.Content>
                 <ListItem.Chevron />
             </ListItem>

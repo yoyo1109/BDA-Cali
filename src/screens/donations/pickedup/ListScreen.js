@@ -36,7 +36,7 @@ const ListScreen = ({ route, navigation }) => {
     const [dateModal, setDateModal] = useState(false);
     const [dateSelectOpen, setDateSelectOpen] = useState(false);
     const [formattedDate, setFormattedDate] = useState(
-        new Date().toLocaleDateString('es-CO')
+        new Date().toLocaleDateString('en-US')
     );
 
     // grab all documents in donationForms collection from firebase
@@ -130,10 +130,10 @@ const ListScreen = ({ route, navigation }) => {
                                 marginBottom: 24,
                             }}
                         >
-                            Selecciona un conductor
+                            Select a driver
                         </Text>
                         {drivers.length === 0 ? (
-                            <Text>No hay controladores disponibles.</Text>
+                            <Text>No drivers available.</Text>
                         ) : (
                             <>
                                 <TouchableOpacity
@@ -156,7 +156,7 @@ const ListScreen = ({ route, navigation }) => {
                                             margin: 10,
                                         }}
                                     >
-                                        Obtener todos controladores
+                                        Show all drivers
                                     </Text>
                                 </TouchableOpacity>
                                 <ScrollView>
@@ -226,7 +226,7 @@ const ListScreen = ({ route, navigation }) => {
                                 marginBottom: 24,
                             }}
                         >
-                            Fecha de recogida
+                            Pickup date
                         </Text>
                         <TouchableOpacity
                             style={{
@@ -248,7 +248,7 @@ const ListScreen = ({ route, navigation }) => {
                                     margin: 10,
                                 }}
                             >
-                                Obtener todas fechas
+                                Show all dates
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
@@ -270,7 +270,7 @@ const ListScreen = ({ route, navigation }) => {
                                     margin: 10,
                                 }}
                             >
-                                Seleccionar fecha especifica
+                                Select specific date
                             </Text>
                         </TouchableOpacity>
                     </View>
@@ -289,7 +289,7 @@ const ListScreen = ({ route, navigation }) => {
                 onConfirm={(date) => {
                     setDateSelectOpen(false);
                     setDateFilter(date);
-                    setFormattedDate(date.toLocaleDateString('es-CO'));
+                    setFormattedDate(date.toLocaleDateString('en-US'));
                     getPickedupDonations(driverFilter, date);
                 }}
                 onCancel={() => setDateSelectOpen(false)}
@@ -318,7 +318,7 @@ const ListScreen = ({ route, navigation }) => {
                     <Chip
                         title={
                             driverFilter === null
-                                ? 'Todos conductores'
+                                ? 'All drivers'
                                 : driverFilterName
                         }
                         icon={{
@@ -337,7 +337,7 @@ const ListScreen = ({ route, navigation }) => {
                     />
                     <Chip
                         title={
-                            dateFilter === null ? 'Todas fechas' : formattedDate
+                            dateFilter === null ? 'All dates' : formattedDate
                         }
                         icon={{
                             name: 'calendar',
@@ -377,12 +377,12 @@ const ListScreen = ({ route, navigation }) => {
                             }}
                         >
                             {driverFilter === null && dateFilter === null
-                                ? 'No hay donaciones que hayan sido recogidas'
+                                ? 'No donations have been picked up.'
                                 : driverFilter === null && dateFilter !== null
-                                ? `No hay donaciones que hayan sido recogidas el ${formattedDate}.`
+                                ? `No donations were picked up on ${formattedDate}.`
                                 : driverFilter !== null && dateFilter === null
-                                ? `${driverFilterName} no tiene donaciones recaudadas.`
-                                : `${driverFilterName} no tiene donaciones recaudadas el ${formattedDate}.`}
+                                ? `${driverFilterName} has no picked up donations.`
+                                : `${driverFilterName} has no picked up donations on ${formattedDate}.`}
                         </Text>
                     </View>
                 )}
@@ -434,7 +434,7 @@ const ListScreen = ({ route, navigation }) => {
                                                         fontWeight: '500',
                                                     }}
                                                 >
-                                                    Conductor:
+                                                    Driver:
                                                 </Text>
                                                 <Text
                                                     style={{ color: '#626b79' }}
@@ -458,7 +458,7 @@ const ListScreen = ({ route, navigation }) => {
                                                         fontWeight: '500',
                                                     }}
                                                 >
-                                                    Fecha:
+                                                    Date:
                                                 </Text>
                                                 <Text
                                                     style={{ color: '#626b79' }}
@@ -466,7 +466,7 @@ const ListScreen = ({ route, navigation }) => {
                                                     {data.pickup.date
                                                         .toDate()
                                                         .toLocaleDateString(
-                                                            'es-CO'
+                                                            'en-US'
                                                         )}
                                                 </Text>
                                             </View>

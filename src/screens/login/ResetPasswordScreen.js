@@ -77,16 +77,15 @@ const ResetPasswordScreen = ({ route, navigation }) => {
             </Modal>
             <View style={{ width: '80%' }}>
                 <View style={{ paddingBottom: 30 }}>
-                    <Text style={styles.heading}>Cambiar la contraseña</Text>
+                    <Text style={styles.heading}>Reset your password</Text>
                     <Text style={{ color: 'gray' }}>
-                        Ingrese su correo electrónico para su cuenta y le
-                        enviaremos un correo electrónico para restablecer su
-                        contraseña.
+                        Enter the email tied to your account and we will send
+                        your password reset instructions.
                     </Text>
                 </View>
                 <Text>Email</Text>
                 <TextInput
-                    placeholder='nombre@bancalimentos.com'
+                    placeholder='name@foodbank.com'
                     value={email}
                     onChangeText={(text) => setEmail(text)}
                     style={styles.input}
@@ -97,9 +96,7 @@ const ResetPasswordScreen = ({ route, navigation }) => {
                     onPress={handleEmailSubmit}
                     style={styles.button}
                 >
-                    <Text style={styles.buttonText}>
-                        Enviar enlace de reinicio
-                    </Text>
+                    <Text style={styles.buttonText}>Send reset link</Text>
                 </TouchableOpacity>
             </View>
         </KeyboardAvoidingView>

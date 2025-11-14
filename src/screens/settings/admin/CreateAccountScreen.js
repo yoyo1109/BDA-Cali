@@ -26,9 +26,9 @@ const CreateAccountScreen = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const types = {
-        admin: 'Administrador',
-        warehouse: 'Depósito',
-        driver: 'Conductor',
+        admin: 'Administrator',
+        warehouse: 'Warehouse',
+        driver: 'Driver',
     };
 
     const generatePassword = () => {
@@ -101,7 +101,7 @@ const CreateAccountScreen = () => {
         if (isLoading) {
             return <ActivityIndicator color='white' />;
         } else {
-            return <Text style={styles.buttonText}>Crear</Text>;
+            return <Text style={styles.buttonText}>Create</Text>;
         }
     }
 
@@ -109,21 +109,17 @@ const CreateAccountScreen = () => {
         const platform = Platform.OS;
 
         if (platform === 'ios') {
-            const buttons = [
-                'Cancelar',
-                'Administrador',
-                'Depósito',
-                'Conductor',
-            ];
+            const options = ['Cancel', types.admin, types.warehouse, types.driver];
+            const values = ['admin', 'warehouse', 'driver'];
             return (
                 <TouchableOpacity
                     style={styles.actionSheetButton}
                     onPress={() => {
                         ActionSheetIOS.showActionSheetWithOptions(
-                            { options: buttons, cancelButtonIndex: 0 },
+                            { options, cancelButtonIndex: 0 },
                             (buttonIndex) => {
-                                if (buttonIndex !== 0) {
-                                    setAccountType(types[buttons[buttonIndex]]);
+                                if (buttonIndex > 0) {
+                                    setAccountType(values[buttonIndex - 1]);
                                 }
                             }
                         );
@@ -141,7 +137,7 @@ const CreateAccountScreen = () => {
         <KeyboardAwareScrollView>
             <View style={styles.container} behavior='padding'>
                 <View style={styles.section}>
-                    <Text style={styles.heading}>Tipo de Cuenta</Text>
+                    <Text style={styles.heading}>Account Type</Text>
                     <Dropdown />
                     {/* Picker is here because Android was glitchy when conditionally
                         rendering Picker in Dropdown(), so if platform is Android, we
@@ -153,15 +149,15 @@ const CreateAccountScreen = () => {
                         }}
                         style={Platform.OS === 'ios' ? { display: 'none' } : {}}
                     >
-                        <Picker.Item label='Administrador' value='admin' />
-                        <Picker.Item label='Depósito' value='warehouse' />
-                        <Picker.Item label='Conductor' value='driver' />
+                        <Picker.Item label='Administrator' value='admin' />
+                        <Picker.Item label='Warehouse' value='warehouse' />
+                        <Picker.Item label='Driver' value='driver' />
                     </Picker>
                 </View>
                 <View style={styles.section}>
                     <Text style={styles.heading}>Name</Text>
                     <Text>
-                        Primer nombre <Text style={{ color: 'red' }}>*</Text>
+                        First name <Text style={{ color: 'red' }}>*</Text>
                     </Text>
                     <TextInput
                         placeholder='Adrian'
@@ -170,7 +166,7 @@ const CreateAccountScreen = () => {
                         style={styles.input}
                     />
                     <Text>
-                        Primer apellido <Text style={{ color: 'red' }}>*</Text>
+                        First last name <Text style={{ color: 'red' }}>*</Text>
                     </Text>
                     <TextInput
                         placeholder='Ramirez'
@@ -178,7 +174,7 @@ const CreateAccountScreen = () => {
                         onChangeText={setLastName1}
                         style={styles.input}
                     />
-                    <Text>Segundo apellido</Text>
+                    <Text>Second last name</Text>
                     <TextInput
                         placeholder='Lopez'
                         value={lastName2}
@@ -191,7 +187,7 @@ const CreateAccountScreen = () => {
                         Email <Text style={{ color: 'red' }}>*</Text>
                     </Text>
                     <TextInput
-                        placeholder='nombre@bdacali.com'
+                        placeholder='name@bdacali.com'
                         value={email}
                         onChangeText={setEmail}
                         style={styles.input}
@@ -200,15 +196,15 @@ const CreateAccountScreen = () => {
                 </View>
                 <View style={styles.passwordAdvisory}>
                     <Text style={styles.passwordAdvisoryText}>
-                        Se genera automáticamente una contraseña con las
-                        primeras tres letras del nombre y las primeras cuatro
-                        letras de los apellidos.
+                        A password is automatically generated using the first
+                        three letters of the first name and the first four
+                        letters of the last names.
                         {'\n\n'}
-                        Ejemplo:
+                        Example:
                         {'\n\n'}
-                        Nombre: Adrian Ramirez Lopez
+                        Name: Adrian Ramirez Lopez
                         {'\n'}
-                        Contraseña: AdrRamiLope
+                        Password: AdrRamiLope
                     </Text>
                 </View>
                 <TouchableOpacity

@@ -12,12 +12,12 @@ const PickedupScreen = () => {
             <Stack.Screen
                 name='List'
                 component={ListScreen}
-                options={{ title: 'Recogido' }}
+                options={{ title: 'Picked Up' }}
             />
             <Stack.Screen
                 name='View'
                 component={ViewScreen}
-                options={{ title: 'Donación Info' }}
+                options={{ title: 'Donation Info' }}
             />
         </Stack.Navigator>
     );

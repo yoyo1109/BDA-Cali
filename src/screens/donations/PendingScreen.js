@@ -13,19 +13,19 @@ const PendingScreen = ({ navigation }) => {
             <Stack.Screen
                 name='List'
                 component={ListScreen}
-                options={{ title: 'Pendiente' }}
+                options={{ title: 'Pending' }}
             />
             <Stack.Screen
                 name='View'
                 component={ViewScreen}
                 options={{
-                    title: 'Donación Info',
+                    title: 'Donation Info',
                 }}
             />
             <Stack.Screen
                 name='AssignDriver'
                 component={AssignDriverScreen}
-                options={{ title: 'Asignar Conductor' }}
+                options={{ title: 'Assign Driver' }}
             />
         </Stack.Navigator>
     );

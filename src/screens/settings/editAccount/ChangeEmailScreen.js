@@ -53,18 +53,16 @@ const ChangeEmailScreen = ({ route, navigation }) => {
         if (email === '') return null;
 
         Alert.alert(
-            'Confirmar',
-            '¿Está seguro de que desea cambiar su correo electrónico a ' +
-                email +
-                '?',
+            'Confirm',
+            'Are you sure you want to change your email to ' + email + '?',
             [
                 {
-                    text: 'Cancelar',
+                    text: 'Cancel',
                     onPress: () => {},
                     style: 'cancel',
                 },
                 {
-                    text: 'Entregar',
+                    text: 'Update',
                     onPress: () => {
                         update();
                     },
@@ -95,22 +93,19 @@ const ChangeEmailScreen = ({ route, navigation }) => {
                 </View>
             </Modal>
             <View style={{ width: '80%' }}>
-                <Text style={styles.heading}>Cambiar Email</Text>
+                <Text style={styles.heading}>Change email</Text>
                 <Text style={{ color: 'gray' }}>
-                    Si desea cambiar su correo electrónico, ingrese uno nuevo a
-                    continuación.
+                    If you'd like to change your email, enter a new one below.
                 </Text>
                 <TextInput
-                    placeholder='Ingrese email aquí...'
+                    placeholder='Enter email here...'
                     value={email}
                     onChangeText={setEmail}
                     style={styles.input}
                     autoCapitalize='none'
                 />
                 {success ? (
-                    <Text style={styles.success}>
-                        Email cambiado con éxito!
-                    </Text>
+                    <Text style={styles.success}>Email updated successfully!</Text>
                 ) : null}
                 <TouchableOpacity
                     onPress={handleButton}
@@ -120,7 +115,7 @@ const ChangeEmailScreen = ({ route, navigation }) => {
                     {isLoading ? (
                         <ActivityIndicator />
                     ) : (
-                        <Text style={styles.buttonText}>Actualizar</Text>
+                        <Text style={styles.buttonText}>Update</Text>
                     )}
                 </TouchableOpacity>
             </View>

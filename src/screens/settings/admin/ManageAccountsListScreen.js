@@ -24,9 +24,9 @@ const ManageAccountsListScreen = ({ route, navigation }) => {
     const mounted = useRef(true);
 
     const types = {
-        admin: 'Administrador',
-        warehouse: 'Depósito',
-        driver: 'Conductor',
+        admin: 'Administrator',
+        warehouse: 'Warehouse',
+        driver: 'Driver',
     };
 
     const getUsers = async () => {
@@ -110,7 +110,7 @@ const ManageAccountsListScreen = ({ route, navigation }) => {
                     }}
                 >
                     <Chip
-                        title={type === null ? 'Todos tipos' : types[type]}
+                        title={type === null ? 'All types' : types[type]}
                         icon={{
                             name: 'account-circle',
                             type: 'material-community',

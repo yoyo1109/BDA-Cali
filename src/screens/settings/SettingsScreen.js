@@ -18,42 +18,42 @@ const SettingsScreen = () => {
             <Stack.Screen
                 name='SettingsList'
                 component={SettingsListScreen}
-                options={{ title: 'Ajustes' }}
+                options={{ title: 'Settings' }}
             />
             <Stack.Screen
                 name='EditAccountList'
                 component={EditAccountListScreen}
-                options={{ title: 'Mi Cuenta' }}
+                options={{ title: 'My Account' }}
             />
             <Stack.Screen
                 name='ChangeEmail'
                 component={ChangeEmailScreen}
-                options={{ title: 'Cambiar Email' }}
+                options={{ title: 'Change Email' }}
             />
             <Stack.Screen
                 name='ChangePassword'
                 component={ChangePasswordScreen}
-                options={{ title: 'Cambia la Contraseña' }}
+                options={{ title: 'Change Password' }}
             />
             <Stack.Screen
                 name='ManageAccountsList'
                 component={ManageAccountsListScreen}
-                options={{ title: 'Cuentas de Administración' }}
+                options={{ title: 'Admin Accounts' }}
             />
             <Stack.Screen
                 name='ManageAccountsView'
                 component={ManageAccountsViewScreen}
-                options={{ title: 'Cambiar cuenta' }}
+                options={{ title: 'Edit Account' }}
             />
             <Stack.Screen
                 name='CreateAccount'
                 component={CreateAccountScreen}
-                options={{ title: 'Crear una Cuenta' }}
+                options={{ title: 'Create Account' }}
             />
             <Stack.Screen
                 name='Language'
                 component={LanguageScreen}
-                options={{ title: 'Idioma' }}
+                options={{ title: 'Language' }}
             />
         </Stack.Navigator>
     );

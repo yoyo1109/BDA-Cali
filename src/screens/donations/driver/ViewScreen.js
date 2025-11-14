@@ -216,7 +216,7 @@ const ViewScreen = ({ route, navigation }) => {
                         }}
                     >
                         <Button
-                            title='Cancelar'
+                            title='Cancel'
                             icon={{
                                 name: 'arrow-left',
                                 type: 'material-community',
@@ -230,7 +230,7 @@ const ViewScreen = ({ route, navigation }) => {
                         />
                         <View style={{ flexDirection: 'row' }}>
                             <Button
-                                title='Limpiar'
+                                title='Clear'
                                 onPress={handleClear}
                                 buttonStyle={{
                                     backgroundColor: 'grey',
@@ -238,7 +238,7 @@ const ViewScreen = ({ route, navigation }) => {
                                 }}
                             />
                             <Button
-                                title='Entregar'
+                                title='Submit'
                                 onPress={handleConfirm}
                                 buttonStyle={{ marginRight: 40 }}
                             />
@@ -257,17 +257,17 @@ const ViewScreen = ({ route, navigation }) => {
                 initialValues={{ noReceiptReason: '' }}
                 onSubmit={(values) => {
                     Alert.alert(
-                        'Confirmar',
-                        '¿Estás seguro de que quieres enviar esta donación?',
+                        'Confirm',
+                        'Are you sure you want to submit this donation?',
                         [
                             {
-                                text: 'Entregar',
+                                text: 'Submit',
                                 onPress: () => {
                                     handleDonationSubmit(values);
                                 },
                             },
                             {
-                                text: 'Cancelar',
+                                text: 'Cancel',
                                 onPress: () => {},
                                 style: 'cancel',
                             },
@@ -279,10 +279,10 @@ const ViewScreen = ({ route, navigation }) => {
                 validate={(values) => {
                     const errors = {};
                     if (hasReceipt === 'no' && !values.noReceiptReason) {
-                        errors.noReceiptReason = 'Falta el motivo del recibo';
+                        errors.noReceiptReason = 'Missing receipt reason';
                     }
                     if (hasReceipt === 'yes' && image === null) {
-                        errors.receiptPicture = 'Foto de recibo';
+                        errors.receiptPicture = 'Receipt photo required';
                     }
 
                     if (Object.keys(errors).length !== 0) {
@@ -295,7 +295,7 @@ const ViewScreen = ({ route, navigation }) => {
                             }
                             i++;
                         }
-                        Alert.alert('Información faltante', `${missing}`);
+                        Alert.alert('Missing information', `${missing}`);
                     }
                     return errors;
                 }}
@@ -353,7 +353,7 @@ const ViewScreen = ({ route, navigation }) => {
                                                 marginLeft: 5,
                                             }}
                                         >
-                                            Navegar
+                                            Navigate
                                         </Text>
                                     </View>
                                     <View
@@ -400,12 +400,12 @@ const ViewScreen = ({ route, navigation }) => {
                                     }}
                                 />
                                 <Text style={styles.header}>
-                                    El donante tiene recibo?{' '}
+                                    Does the donor have a receipt?{' '}
                                     <Text style={{ color: 'red' }}>*</Text>
                                 </Text>
                                 <View style={{ alignItems: 'center' }}>
                                     <CheckBox
-                                        title='Sí'
+                                        title='Yes'
                                         checked={hasReceipt === 'yes'}
                                         onPress={() => setHasReceipt('yes')}
                                         checkedIcon='dot-circle-o'
@@ -451,7 +451,8 @@ const ViewScreen = ({ route, navigation }) => {
                                                             ? styles.buttonError
                                                             : '',
                                                     ]}
-                                                    title='Subir'
+                                                   title='Subir'
+                                                    title='Upload'
                                                     onPress={pickImage}
                                                     icon={{
                                                         name: 'image',
@@ -468,7 +469,8 @@ const ViewScreen = ({ route, navigation }) => {
                                                             ? styles.buttonError
                                                             : '',
                                                     ]}
-                                                    title='Captura'
+                                                   title='Captura'
+                                                    title='Capture'
                                                     onPress={takePhoto}
                                                     icon={{
                                                         name: 'camera',
@@ -493,7 +495,7 @@ const ViewScreen = ({ route, navigation }) => {
                                                     textAlign: 'center',
                                                 }}
                                             >
-                                                Falta el motivo del recibo:{' '}
+                                                Missing receipt reason:{' '}
                                                 <Text style={{ color: 'red' }}>
                                                     *
                                                 </Text>
@@ -534,7 +536,7 @@ const ViewScreen = ({ route, navigation }) => {
                                 }}
                             >
                                 <Text style={styles.header}>
-                                    Firma del donante
+                                    Donor signature
                                 </Text>
                                 {signature !== null && (
                                     <TouchableOpacity
@@ -564,7 +566,7 @@ const ViewScreen = ({ route, navigation }) => {
                                 )}
                                 <View style={{ width: '50%' }}>
                                     <Button
-                                        title='Pantalla abierta'
+                                        title='Open signature pad'
                                         onPress={() => {
                                             setSignatureVisible(true);
                                             ScreenOrientation.lockAsync(
@@ -583,7 +585,7 @@ const ViewScreen = ({ route, navigation }) => {
                             disabled={loading}
                         >
                             <Text style={{ color: 'white', fontSize: 24 }}>
-                                RECOGIDO
+                                PICKED UP
                             </Text>
                         </TouchableOpacity>
                     </KeyboardAvoidingView>

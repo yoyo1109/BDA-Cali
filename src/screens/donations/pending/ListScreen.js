@@ -22,11 +22,11 @@ const ListScreen = ({ route, navigation }) => {
     const [filterModalVisible, setFilterModalVisible] = useState(false);
 
     const filterTranslations = {
-        all: 'Todos',
-        ready: 'Listos',
-        notready: 'No Listos',
-        newest: 'Más nuevo',
-        oldest: 'Más viejo',
+        all: 'All',
+        ready: 'Ready',
+        notready: 'Not ready',
+        newest: 'Newest',
+        oldest: 'Oldest',
     };
 
     // grab all documents in donationForms collection from firebase
@@ -106,11 +106,9 @@ const ListScreen = ({ route, navigation }) => {
                             />
                         </View>
                         <View>
-                            <Text style={styles.filterHeading}>
-                                Fecha de realización
-                            </Text>
+                            <Text style={styles.filterHeading}>Date created</Text>
                             <CheckBox
-                                title='Más nuevo'
+                                title='Newest'
                                 checked={tempDateFilter === 'newest'}
                                 iconType='material-community'
                                 checkedIcon='radiobox-marked'
@@ -119,7 +117,7 @@ const ListScreen = ({ route, navigation }) => {
                                 onPress={() => setTempDateFilter('newest')}
                             />
                             <CheckBox
-                                title='Más viejo'
+                                title='Oldest'
                                 checked={tempDateFilter === 'oldest'}
                                 iconType='material-community'
                                 checkedIcon='radiobox-marked'
@@ -263,7 +261,7 @@ const ListScreen = ({ route, navigation }) => {
                                 color: '#626b79',
                             }}
                         >
-                            Sin nuevas donaciones.
+                            No new donations.
                         </Text>
                     </View>
                 )}
@@ -316,9 +314,9 @@ const ListScreen = ({ route, navigation }) => {
                                     <ListItem.Subtitle
                                         style={{ color: '#626b79' }}
                                     >
-                                        {`Creada: ${data.dateCreated
+                                        {`Created: ${data.dateCreated
                                             .toDate()
-                                            .toLocaleDateString('es-CO')}`}
+                                            .toLocaleDateString('en-US')}`}
                                     </ListItem.Subtitle>
                                     <ListItem.Subtitle
                                         style={{ paddingTop: 5, width: '100%' }}

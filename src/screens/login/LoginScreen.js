@@ -24,9 +24,13 @@ const LoginScreen = ({ navigation }) => {
     const mounted = useRef(true);
 
     const handleSignIn = () => {
+        console.log('[Login] Sign-in pressed', { email });
         setLoading(true);
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
+                console.log('[Login] Firebase auth success', {
+                    uid: userCredential.user.uid,
+                });
                 // perform sign-in operations
                 getDoc(doc(db, 'users', userCredential.user.uid))
                     .then((userSnap) => {
@@ -34,15 +38,19 @@ const LoginScreen = ({ navigation }) => {
                             alert('User does not exist anymore.');
                             return;
                         }
+                        console.log('[Login] User document found');
                     })
                     .catch((error) => {
+                        console.error('[Login] Failed to load user document', error);
                         alert(error);
                     });
             })
             .catch((error) => {
+                console.error('[Login] Firebase auth error', error);
                 alert(error);
             });
         if (mounted.current) {
+            console.log('[Login] Sign-in handler finished (loading false)');
             setLoading(false);
         }
     };
@@ -72,7 +80,7 @@ const LoginScreen = ({ navigation }) => {
                     autoCorrect={false}
                 />
                 <TextInput
-                    placeholder='Clave'
+                    placeholder='Password'
                     value={password}
                     onChangeText={(text) => setPassword(text)}
                     style={styles.input}
@@ -85,7 +93,7 @@ const LoginScreen = ({ navigation }) => {
                     {loading ? (
                         <ActivityIndicator color='white' />
                     ) : (
-                        <Text style={styles.buttonText}>Iniciar sesión</Text>
+                        <Text style={styles.buttonText}>Sign In</Text>
                     )}
                 </TouchableOpacity>
             </View>
@@ -95,7 +103,7 @@ const LoginScreen = ({ navigation }) => {
                 }}
                 style={styles.forgotPassword}
             >
-                <Text style={styles.hyperlink}>Olvidar la contraseña</Text>
+                <Text style={styles.hyperlink}>Forgot password</Text>
             </TouchableOpacity>
         </KeyboardAvoidingView>
     );

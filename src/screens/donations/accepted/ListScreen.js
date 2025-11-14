@@ -111,10 +111,10 @@ const ListScreen = ({ route, navigation }) => {
                                 marginBottom: 24,
                             }}
                         >
-                            Selecciona un conductor
+                            Select a driver
                         </Text>
                         {drivers.length === 0 ? (
-                            <Text>No hay controladores disponibles.</Text>
+                            <Text>No drivers available.</Text>
                         ) : (
                             <>
                                 <TouchableOpacity
@@ -137,7 +137,7 @@ const ListScreen = ({ route, navigation }) => {
                                             margin: 10,
                                         }}
                                     >
-                                        Obtener todos controladores
+                                        Show all drivers
                                     </Text>
                                 </TouchableOpacity>
                                 <ScrollView>
@@ -206,7 +206,7 @@ const ListScreen = ({ route, navigation }) => {
                                 marginBottom: 24,
                             }}
                         >
-                            Fecha de recogida
+                            Pickup date
                         </Text>
                         <TouchableOpacity
                             style={{
@@ -228,7 +228,7 @@ const ListScreen = ({ route, navigation }) => {
                                     margin: 10,
                                 }}
                             >
-                                Obtener todas fechas
+                                Show all dates
                             </Text>
                         </TouchableOpacity>
                         <TouchableOpacity
@@ -250,7 +250,7 @@ const ListScreen = ({ route, navigation }) => {
                                     margin: 10,
                                 }}
                             >
-                                Seleccionar fecha especifica
+                                Select specific date
                             </Text>
                         </TouchableOpacity>
                     </View>
@@ -279,7 +279,7 @@ const ListScreen = ({ route, navigation }) => {
                 onConfirm={(date) => {
                     setDateSelectOpen(false);
                     setDateFilter(date);
-                    setFormattedDate(date.toLocaleDateString('es-CO'));
+                    setFormattedDate(date.toLocaleDateString('en-US'));
                     getAcceptedDonations(driverFilter, date);
                 }}
                 onCancel={() => setDateSelectOpen(false)}
@@ -308,7 +308,7 @@ const ListScreen = ({ route, navigation }) => {
                     <Chip
                         title={
                             driverFilter === null
-                                ? 'Todos conductores'
+                                ? 'All drivers'
                                 : driverFilterName
                         }
                         icon={{
@@ -329,7 +329,7 @@ const ListScreen = ({ route, navigation }) => {
                     />
                     <Chip
                         title={
-                            dateFilter === null ? 'Todas fechas' : formattedDate
+                            dateFilter === null ? 'All dates' : formattedDate
                         }
                         icon={{
                             name: 'calendar',
@@ -371,12 +371,12 @@ const ListScreen = ({ route, navigation }) => {
                             }}
                         >
                             {driverFilter === null && dateFilter === null
-                                ? 'No hay donaciones que se estén recogiendo.'
+                                ? 'No donations are currently being picked up.'
                                 : driverFilter === null && dateFilter !== null
-                                ? `No hay donaciones que se estén recogiendo el ${formattedDate}.`
+                                ? `No donations are being picked up on ${formattedDate}.`
                                 : driverFilter !== null && dateFilter === null
-                                ? `${driverFilterName} no está recolectando donaciones.`
-                                : `${driverFilterName} no está recolectando donaciones el ${formattedDate}.`}
+                                ? `${driverFilterName} is not picking up donations.`
+                                : `${driverFilterName} is not picking up donations on ${formattedDate}.`}
                         </Text>
                     </View>
                 )}
@@ -428,7 +428,7 @@ const ListScreen = ({ route, navigation }) => {
                                                         fontWeight: '500',
                                                     }}
                                                 >
-                                                    Conductor:
+                                                    Driver:
                                                 </Text>
                                                 <Text
                                                     style={{ color: '#626b79' }}
@@ -452,7 +452,7 @@ const ListScreen = ({ route, navigation }) => {
                                                         fontWeight: '500',
                                                     }}
                                                 >
-                                                    Fecha:
+                                                    Date:
                                                 </Text>
                                                 <Text
                                                     style={{ color: '#626b79' }}
@@ -460,7 +460,7 @@ const ListScreen = ({ route, navigation }) => {
                                                     {data.pickup.date
                                                         .toDate()
                                                         .toLocaleDateString(
-                                                            'es-CO'
+                                                            'en-US'
                                                         )}
                                                 </Text>
                                             </View>

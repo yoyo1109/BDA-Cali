@@ -19,6 +19,13 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { getDownloadURL, getStorage, ref } from 'firebase/storage';
 
+const PACKAGING_LABELS = {
+    Caja: 'Box',
+    Kilos: 'Kilograms',
+    Unidades: 'Units',
+    Estivas: 'Pallets',
+};
+
 const ViewScreen = ({ route, navigation }) => {
     const data = route.params.data;
     const id = route.params.id;
@@ -201,31 +208,31 @@ const ViewScreen = ({ route, navigation }) => {
                                     fontWeight: '600',
                                 }}
                             >
-                                ¿Cambiar el embalaje?
+                                Change packaging?
                             </Text>
                             <CheckBox
-                                title='Caja'
+                                title='Box'
                                 checked={packaging === 'Caja'}
                                 checkedIcon='dot-circle-o'
                                 uncheckedIcon='circle-o'
                                 onPress={() => updatePackaging('Caja')}
                             />
                             <CheckBox
-                                title='Kilos'
+                                title='Kilograms'
                                 checked={packaging === 'Kilos'}
                                 checkedIcon='dot-circle-o'
                                 uncheckedIcon='circle-o'
                                 onPress={() => updatePackaging('Kilos')}
                             />
                             <CheckBox
-                                title='Unidades'
+                                title='Units'
                                 checked={packaging === 'Unidades'}
                                 checkedIcon='dot-circle-o'
                                 uncheckedIcon='circle-o'
                                 onPress={() => updatePackaging('Unidades')}
                             />
                             <CheckBox
-                                title='Estivas'
+                                title='Pallets'
                                 checked={packaging === 'Estivas'}
                                 checkedIcon='dot-circle-o'
                                 uncheckedIcon='circle-o'
@@ -259,7 +266,7 @@ const ViewScreen = ({ route, navigation }) => {
                                     textAlign: 'center',
                                 }}
                             >
-                                ¿Cambiar cantidad/peso?
+                                Change quantity/weight?
                             </Text>
                             <View style={{ alignItems: 'center' }}>
                                 <TextInput
@@ -283,7 +290,7 @@ const ViewScreen = ({ route, navigation }) => {
                                     }}
                                 >
                                     <Text style={styles.expSubmitText}>
-                                        Cambio
+                                        Update
                                     </Text>
                                 </TouchableOpacity>
                             </View>
@@ -314,7 +321,7 @@ const ViewScreen = ({ route, navigation }) => {
                                         marginBottom: 12,
                                     }}
                                 >
-                                    Razón por la que falta el recibo:
+                                    Reason receipt is missing:
                                 </Text>
                                 <Text
                                     style={{
@@ -355,14 +362,14 @@ const ViewScreen = ({ route, navigation }) => {
             </Modal>
             <ScrollView>
                 <View style={styles.section}>
-                    <Text style={styles.header}>Info de donación</Text>
+                    <Text style={styles.header}>Donation info</Text>
                     <ListItem topDivider bottomDivider>
                         <ListItem.Content>
-                            <ListItem.Title>Tipo de producto</ListItem.Title>
+                            <ListItem.Title>Product type</ListItem.Title>
                             <ListItem.Subtitle>
                                 {data.donation.type === 'perish'
-                                    ? 'Perecedero'
-                                    : 'No perecedero'}
+                                    ? 'Perishable'
+                                    : 'Non-perishable'}
                             </ListItem.Subtitle>
                         </ListItem.Content>
                     </ListItem>
@@ -371,8 +378,10 @@ const ViewScreen = ({ route, navigation }) => {
                         onPress={() => setPackagingModal(true)}
                     >
                         <ListItem.Content>
-                            <ListItem.Title>Tipo de embalaje</ListItem.Title>
-                            <ListItem.Subtitle>{packaging}</ListItem.Subtitle>
+                            <ListItem.Title>Packaging type</ListItem.Title>
+                            <ListItem.Subtitle>
+                                {PACKAGING_LABELS[packaging] ?? packaging}
+                            </ListItem.Subtitle>
                         </ListItem.Content>
                         <ListItem.Chevron />
                     </ListItem>
@@ -381,7 +390,7 @@ const ViewScreen = ({ route, navigation }) => {
                         onPress={() => setQuantityModal(true)}
                     >
                         <ListItem.Content>
-                            <ListItem.Title>Cantidad/Peso</ListItem.Title>
+                            <ListItem.Title>Quantity/Weight</ListItem.Title>
                             <ListItem.Subtitle>{quantity}</ListItem.Subtitle>
                         </ListItem.Content>
                         <ListItem.Chevron />
@@ -390,15 +399,15 @@ const ViewScreen = ({ route, navigation }) => {
                 {data.donation.type === 'perish' && (
                     <View style={styles.section}>
                         <Text style={styles.header}>
-                            Info de producto perecedero
+                            Perishable product info
                         </Text>
                         <ListItem
                             topDivider
                             bottomDivider
                             onPress={() => {
                                 Alert.alert(
-                                    '¿Cambiar fecha?',
-                                    '¿Quieres cambiar la fecha de caducidad?',
+                                    'Change date?',
+                                    'Do you want to update the expiration date?',
                                     [
                                         {
                                             text: 'No',
@@ -406,7 +415,7 @@ const ViewScreen = ({ route, navigation }) => {
                                             style: 'cancel',
                                         },
                                         {
-                                            text: 'Sí',
+                                            text: 'Yes',
                                             onPress: () => setDateOpen(true),
                                         },
                                     ]
@@ -415,11 +424,13 @@ const ViewScreen = ({ route, navigation }) => {
                         >
                             <ListItem.Content>
                                 <ListItem.Title>
-                                    Fecha de caducidad
+                                    Expiration date
                                 </ListItem.Title>
                                 <ListItem.Subtitle>
                                     {expiration !== null
-                                        ? expiration.toLocaleDateString('es-CO')
+                                        ? expiration.toLocaleDateString(
+                                              'en-US'
+                                          )
                                         : ''}
                                 </ListItem.Subtitle>
                             </ListItem.Content>
@@ -428,7 +439,7 @@ const ViewScreen = ({ route, navigation }) => {
                         {data.donation.perishable.traits !== null && (
                             <ListItem bottomDivider>
                                 <ListItem.Content>
-                                    <ListItem.Title>Descripción</ListItem.Title>
+                                    <ListItem.Title>Description</ListItem.Title>
                                     <ListItem.Subtitle>
                                         {data.donation.perishable.traits}
                                     </ListItem.Subtitle>
@@ -438,7 +449,7 @@ const ViewScreen = ({ route, navigation }) => {
                     </View>
                 )}
                 <View style={styles.section}>
-                    <Text style={styles.header}>Recibo & Firma</Text>
+                    <Text style={styles.header}>Receipt & signature</Text>
                     <ListItem
                         topDivider
                         bottomDivider
@@ -449,23 +460,23 @@ const ViewScreen = ({ route, navigation }) => {
                     >
                         <ListItem.Content>
                             <ListItem.Title>
-                                ¿Se recogió el recibo?
+                                Was the receipt collected?
                             </ListItem.Title>
                             <ListItem.Subtitle>
                                 {data.pickup.receiptImage === undefined
                                     ? 'No'
-                                    : 'Sí'}
+                                    : 'Yes'}
                             </ListItem.Subtitle>
                         </ListItem.Content>
                         <ListItem.Chevron />
                     </ListItem>
                     <ListItem bottomDivider>
                         <ListItem.Content>
-                            <ListItem.Title>¿Firma del donante?</ListItem.Title>
+                            <ListItem.Title>Donor signature?</ListItem.Title>
                             <ListItem.Subtitle>
                                 {data.pickup.signature === undefined
                                     ? 'No'
-                                    : 'Sí'}
+                                    : 'Yes'}
                             </ListItem.Subtitle>
                         </ListItem.Content>
                     </ListItem>
@@ -475,17 +486,17 @@ const ViewScreen = ({ route, navigation }) => {
                 style={styles.doneButton}
                 onPress={() => {
                     Alert.alert(
-                        'Confirmar',
-                        '¿Estás seguro que quieres enviar? Esto no se puede deshacer.',
+                        'Confirm',
+                        'Are you sure you want to submit? This cannot be undone.',
                         [
                             {
-                                text: 'Enviar',
+                                text: 'Submit',
                                 onPress: () => {
                                     submitDonation();
                                 },
                             },
                             {
-                                text: 'Cancelar',
+                                text: 'Cancel',
                                 onPress: () => {},
                                 style: 'cancel',
                             },
@@ -493,7 +504,7 @@ const ViewScreen = ({ route, navigation }) => {
                     );
                 }}
             >
-                <Text style={styles.doneButtonText}>Enviar</Text>
+                <Text style={styles.doneButtonText}>Submit</Text>
             </TouchableOpacity>
         </>
     );

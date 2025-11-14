@@ -9,7 +9,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const ViewScreen = ({ route, navigation }) => {
     const data = route.params.data;
     const id = route.params.id;
-    const pickupDate = data.pickup.date.toDate().toLocaleDateString('es-CO');
+    const pickupDate = data.pickup.date.toDate().toLocaleDateString('en-US');
 
     const [loading, setLoading] = useState(false);
 
@@ -36,7 +36,7 @@ const ViewScreen = ({ route, navigation }) => {
                 <ListItem topDivider bottomDivider>
                     <Icon name='truck' size={25} />
                     <ListItem.Content>
-                        <ListItem.Title>Conductor</ListItem.Title>
+                        <ListItem.Title>Driver</ListItem.Title>
                         <ListItem.Subtitle>
                             {data.pickup.driverName}
                         </ListItem.Subtitle>
@@ -45,7 +45,7 @@ const ViewScreen = ({ route, navigation }) => {
                 <ListItem bottomDivider>
                     <Icon name='calendar-today' size={25} />
                     <ListItem.Content>
-                        <ListItem.Title>Fecha de recogida</ListItem.Title>
+                        <ListItem.Title>Pickup date</ListItem.Title>
                         <ListItem.Subtitle>{pickupDate}</ListItem.Subtitle>
                     </ListItem.Content>
                 </ListItem>
@@ -55,16 +55,16 @@ const ViewScreen = ({ route, navigation }) => {
                     style={{ marginTop: 32 }}
                     onPress={() => {
                         Alert.alert(
-                            'Confirmar',
-                            '¿Estás seguro de que deseas que esta donación vuelva a estar pendiente?',
+                            'Confirm',
+                            'Are you sure you want to move this donation back to pending?',
                             [
                                 {
-                                    text: 'Cancelar',
+                                    text: 'Cancel',
                                     onPress: () => {},
                                     style: 'cancel',
                                 },
                                 {
-                                    text: 'Moverse',
+                                    text: 'Move',
                                     onPress: () => {
                                         moveBack();
                                     },
@@ -76,7 +76,7 @@ const ViewScreen = ({ route, navigation }) => {
                     <Icon name='arrow-left' size={25} color='#0074cb' />
                     <ListItem.Content>
                         <ListItem.Title style={{ color: '#0074cb' }}>
-                            Volver a pendiente
+                            Move back to pending
                         </ListItem.Title>
                     </ListItem.Content>
                 </ListItem>
@@ -88,8 +88,7 @@ const ViewScreen = ({ route, navigation }) => {
                         color: '#626b79',
                     }}
                 >
-                    Para realizar cambios, debe volver a mover la donación a
-                    pendiente.
+                    To make changes, move the donation back to pending first.
                 </Text>
             </ScrollView>
         </View>

@@ -21,7 +21,7 @@ const ChangePasswordScreen = ({ route, navigation }) => {
         updatePassword(auth.currentUser, newPassword)
             .then(() => {
                 // Update successful
-                alert('¡Contraseña cambiada correctamente!');
+                alert('Password changed successfully!');
                 navigation.goBack();
             })
             .catch((error) => {
@@ -34,10 +34,9 @@ const ChangePasswordScreen = ({ route, navigation }) => {
     return (
         <KeyboardAvoidingView style={styles.container}>
             <View style={styles.box}>
-                <Text style={styles.heading}>Cambia Contraseña</Text>
+                <Text style={styles.heading}>Change password</Text>
                 <Text style={{ color: 'gray' }}>
-                    Para cambiar su contraseña, ingrese su nueva contraseña a
-                    continuación.
+                    To change your password, enter a new password below.
                 </Text>
                 <Formik
                     initialValues={{ pass: '', confirmPass: '' }}
@@ -50,8 +49,7 @@ const ChangePasswordScreen = ({ route, navigation }) => {
                             errors.empty = true;
                         } else {
                             if (values.pass !== values.confirmPass) {
-                                errors.passwordMatch =
-                                    'Las contraseñas deben coincidir.';
+                                errors.passwordMatch = 'Passwords must match.';
                             }
                             if (!values.pass) {
                                 errors.pass = 'Pass err';
@@ -79,7 +77,7 @@ const ChangePasswordScreen = ({ route, navigation }) => {
                                         ? styles.inputError
                                         : '',
                                 ]}
-                                placeholder='Nueva contraseña'
+                                placeholder='New password'
                                 onChangeText={handleChange('pass')}
                                 onBlur={handleBlur('pass')}
                                 value={values.pass}
@@ -94,7 +92,7 @@ const ChangePasswordScreen = ({ route, navigation }) => {
                                         ? styles.inputError
                                         : '',
                                 ]}
-                                placeholder='Confirmar contraseña'
+                                placeholder='Confirm password'
                                 onChangeText={handleChange('confirmPass')}
                                 onBlur={handleBlur('confirmPass')}
                                 value={values.confirmPass}
@@ -115,7 +113,7 @@ const ChangePasswordScreen = ({ route, navigation }) => {
                                     <ActivityIndicator color='white' />
                                 ) : (
                                     <Text style={styles.submitButtonText}>
-                                        Cambiar mi contraseña
+                                        Change my password
                                     </Text>
                                 )}
                             </TouchableOpacity>

@@ -16,23 +16,23 @@ const HomeScreen = () => {
 
     return (
         <Tab.Navigator
-            initialRouteName={data.type === 'driver' ? 'Recoger' : 'Pendiente'}
+            initialRouteName={data.type === 'driver' ? 'Pickups' : 'Pending'}
             screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
                     let iconName;
-                    if (route.name === 'Recogidas') {
+                    if (route.name === 'Pickups') {
                         iconName = focused ? 'truck' : 'truck-outline';
-                    } else if (route.name === 'Pendiente') {
+                    } else if (route.name === 'Pending') {
                         iconName = focused
                             ? 'account-clock'
                             : 'account-clock-outline';
-                    } else if (route.name === 'Recogiendo') {
+                    } else if (route.name === 'Active Pickups') {
                         iconName = focused ? 'truck' : 'truck-outline';
-                    } else if (route.name === 'Recogido') {
+                    } else if (route.name === 'Picked Up') {
                         iconName = focused
                             ? 'truck-check'
                             : 'truck-check-outline';
-                    } else if (route.name === 'Ajustes') {
+                    } else if (route.name === 'Settings') {
                         iconName = focused ? 'cog' : 'cog-outline';
                     }
                     return <Icon name={iconName} size={size} color={color} />;
@@ -41,15 +41,18 @@ const HomeScreen = () => {
             })}
         >
             {data.type === 'driver' ? (
-                <Tab.Screen name='Recogidas' component={PickupScreen} />
+                <Tab.Screen name='Pickups' component={PickupScreen} />
             ) : (
                 <>
-                    <Tab.Screen name='Pendiente' component={PendingScreen} />
-                    <Tab.Screen name='Recogiendo' component={AcceptedScreen} />
-                    <Tab.Screen name='Recogido' component={PickedupScreen} />
+                    <Tab.Screen name='Pending' component={PendingScreen} />
+                    <Tab.Screen
+                        name='Active Pickups'
+                        component={AcceptedScreen}
+                    />
+                    <Tab.Screen name='Picked Up' component={PickedupScreen} />
                 </>
             )}
-            <Tab.Screen name='Ajustes' component={SettingsScreen} />
+            <Tab.Screen name='Settings' component={SettingsScreen} />
         </Tab.Navigator>
     );
 };

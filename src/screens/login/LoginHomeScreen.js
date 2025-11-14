@@ -17,7 +17,7 @@ const LoginHomeScreen = () => {
             <Stack.Screen
                 name='ResetPassword'
                 component={ResetPasswordScreen}
-                options={{ title: 'Cambiar la contraseña' }}
+                options={{ title: 'Change Password' }}
             />
         </Stack.Navigator>
     );

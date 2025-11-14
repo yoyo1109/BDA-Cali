@@ -28,7 +28,7 @@ const SettingsScreen = ({ navigation }) => {
             >
                 <Icon name={'account-edit'} size={20} />
                 <ListItem.Content>
-                    <ListItem.Title>Mi Cuenta</ListItem.Title>
+                    <ListItem.Title>My Account</ListItem.Title>
                 </ListItem.Content>
                 <ListItem.Chevron />
             </ListItem>
@@ -41,9 +41,7 @@ const SettingsScreen = ({ navigation }) => {
                 >
                     <Icon name={'account-multiple'} size={20} />
                     <ListItem.Content>
-                        <ListItem.Title>
-                            Cuentas de Administración
-                        </ListItem.Title>
+                        <ListItem.Title>Admin Accounts</ListItem.Title>
                     </ListItem.Content>
                     <ListItem.Chevron />
                 </ListItem>
@@ -57,7 +55,7 @@ const SettingsScreen = ({ navigation }) => {
                 >
                     <Icon name={'account-plus'} size={20} />
                     <ListItem.Content>
-                        <ListItem.Title>Crear una Cuenta</ListItem.Title>
+                        <ListItem.Title>Create Account</ListItem.Title>
                     </ListItem.Content>
                     <ListItem.Chevron />
                 </ListItem>
@@ -66,7 +64,7 @@ const SettingsScreen = ({ navigation }) => {
                 <Icon name={'logout'} size={20} color={'red'} />
                 <ListItem.Content>
                     <ListItem.Title style={{ color: 'red' }}>
-                        Cerrar Sesión
+                        Sign out
                     </ListItem.Title>
                 </ListItem.Content>
             </ListItem>
