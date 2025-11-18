@@ -8,6 +8,10 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "seed:pending": "node scripts/seedPending.js",
+    "seed:accepted": "node scripts/seedAccepted.js",
+    "seed:drivers": "node scripts/seedDrivers.js",
+    "seed:warehouses": "node scripts/seedWarehouses.js",
+    "delete:drivers": "node scripts/deleteDrivers.js",
     "postinstall": "patch-package"
   },
   "dependencies": {
@@ -48,6 +52,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
+    "@faker-js/faker": "^10.1.0",
     "firebase-admin": "^11.11.1",
     "firebase-tools": "^12.9.1",
     "patch-package": "^8.0.1"

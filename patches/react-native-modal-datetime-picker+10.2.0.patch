@@ -1,0 +1,53 @@
+diff --git a/node_modules/react-native-modal-datetime-picker/src/Modal.js b/node_modules/react-native-modal-datetime-picker/src/Modal.js
+index 9c79921..b9ffaaa 100644
+--- a/node_modules/react-native-modal-datetime-picker/src/Modal.js
++++ b/node_modules/react-native-modal-datetime-picker/src/Modal.js
+@@
+-import {
+-  Animated,
+-  DeviceEventEmitter,
+-  Dimensions,
+-  Easing,
+-  Modal as ReactNativeModal,
+-  StyleSheet,
+-  TouchableWithoutFeedback,
+-} from "react-native";
++import {
++  Animated,
++  Dimensions,
++  Easing,
++  Modal as ReactNativeModal,
++  StyleSheet,
++  TouchableWithoutFeedback,
++} from "react-native";
+@@
+-  _isMounted = false;
++  _isMounted = false;
++  dimensionsSubscription = null;
+@@
+     this._isMounted = true;
+     if (this.state.isVisible) {
+       this.show();
+     }
+-    DeviceEventEmitter.addListener(
+-      "didUpdateDimensions",
+-      this.handleDimensionsUpdate
+-    );
++    this.dimensionsSubscription = Dimensions.addEventListener(
++      "change",
++      this.handleDimensionsUpdate
++    );
+   }
+ 
+   componentWillUnmount() {
+-    DeviceEventEmitter.removeListener(
+-      "didUpdateDimensions",
+-      this.handleDimensionsUpdate
+-    );
++    if (this.dimensionsSubscription?.remove) {
++      this.dimensionsSubscription.remove();
++    } else {
++      Dimensions.removeEventListener("change", this.handleDimensionsUpdate);
++    }
+     this._isMounted = false;
+   }

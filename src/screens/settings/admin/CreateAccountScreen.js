@@ -11,8 +11,13 @@ import {
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import React, { useState } from 'react';
-import { db, auth } from '../../../firebase/config';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { db, auth, app } from '../../../firebase/config';
+import {
+    createUserWithEmailAndPassword,
+    getAuth,
+    signOut as signOutAuth,
+} from 'firebase/auth';
+import { getApps, initializeApp } from 'firebase/app';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { setDoc, doc } from 'firebase/firestore';
@@ -50,11 +55,18 @@ const CreateAccountScreen = () => {
         return true;
     };
 
+    const getSecondaryAuth = () => {
+        const existing = getApps().find((a) => a.name === 'Secondary');
+        const secondaryApp = existing || initializeApp(app.options, 'Secondary');
+        return getAuth(secondaryApp);
+    };
+
     const createAccount = () => {
         setIsLoading(true);
         if (inputsValid()) {
             const pass = generatePassword();
-            createUserWithEmailAndPassword(auth, email, pass)
+            const secondaryAuth = getSecondaryAuth();
+            createUserWithEmailAndPassword(secondaryAuth, email, pass)
                 .then(async (userCredential) => {
                     const user = userCredential.user;
                     await setDoc(doc(db, 'users', user.uid), {
@@ -66,14 +78,13 @@ const CreateAccountScreen = () => {
                         },
                         type: accountType,
                     });
+                    await signOutAuth(secondaryAuth);
                     setIsLoading(false);
                     Alert.alert(
                         'User created!',
                         `Type: ${accountType}\nEmail: ${user.email}\nPassword: ${pass}`
                     );
                     clearFields();
-                    // auth.currentUser gets changed to the user that was just created here
-                    // we have to make sure that the user stays the same after creation
                 })
                 .catch((error) => {
                     let errText = '';
@@ -85,6 +96,7 @@ const CreateAccountScreen = () => {
                         errText += error.code;
                     }
                     Alert.alert('Error', errText);
+                    signOutAuth(secondaryAuth).catch(() => {});
                     setIsLoading(false);
                 });
         }
