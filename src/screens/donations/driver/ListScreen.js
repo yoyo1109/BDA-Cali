@@ -104,10 +104,13 @@ const ListScreen = ({ route, navigation }) => {
                     <ListItem
                         key={id}
                         onPress={() => {
-                            navigation.push('View', {
+                            // NEW: Using the new TypeScript screen
+                            navigation.push('PickupComplete', {
                                 id,
                                 data,
                             });
+                            // OLD: Uncomment this line to use the old screen
+                            // navigation.push('View', { id, data });
                         }}
                         topDivider={idx === 0}
                         bottomDivider
