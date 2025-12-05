@@ -11,6 +11,7 @@
     "seed:accepted": "node scripts/seedAccepted.js",
     "seed:drivers": "node scripts/seedDrivers.js",
     "seed:warehouses": "node scripts/seedWarehouses.js",
+    "seed:driver-pickups": "node scripts/seedDriverPickups.js",
     "delete:drivers": "node scripts/deleteDrivers.js",
     "postinstall": "patch-package"
   },

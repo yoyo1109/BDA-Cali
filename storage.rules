@@ -1,0 +1,48 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // ========================================
+    // TESTING RULES - Remove in production!
+    // ========================================
+    // Uncomment the lines below ONLY for testing
+    // Comment them out before deploying to production
+
+    // match /{allPaths=**} {
+    //   allow read, write: if true;
+    // }
+
+    // ========================================
+    // PRODUCTION RULES
+    // ========================================
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isDriver() {
+      return isSignedIn() &&
+             firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.type == 'driver';
+    }
+
+    function isAdminOrWarehouse() {
+      let userData = firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data;
+      return isSignedIn() && (userData.type == 'admin' || userData.type == 'warehouse');
+    }
+
+    // Receipt images
+    match /receipts/{receiptId} {
+      // Drivers can upload receipts
+      allow write: if isDriver();
+      // Admin and warehouse can read all receipts
+      allow read: if isAdminOrWarehouse();
+    }
+
+    // Signature images
+    match /signatures/{signatureId} {
+      // Drivers can upload signatures
+      allow write: if isDriver();
+      // Admin and warehouse can read all signatures
+      allow read: if isAdminOrWarehouse();
+    }
+  }
+}

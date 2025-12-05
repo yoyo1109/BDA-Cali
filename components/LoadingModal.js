@@ -7,6 +7,7 @@ import React from 'react';
  */
 
 const LoadingModal = (props) => {
+    console.log('[LoadingModal] Rendered with visible:', props.visible);
     return (
         <Modal visible={props.visible} animationType='fade' transparent>
             <View style={styles.modalContainer}>

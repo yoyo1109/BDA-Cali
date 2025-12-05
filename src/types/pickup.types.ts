@@ -26,6 +26,13 @@ export interface Client {
   address: Address;
 }
 
+export interface PickupItemData {
+  category: DonationCategory;
+  weight: number;
+  pricePerPound: number;
+  totalPrice: number;
+}
+
 export interface PickupInfo {
   driver: string;
   driverName?: string;
@@ -34,8 +41,12 @@ export interface PickupInfo {
   signatureImage?: string;
   noReceiptReason?: string;
   noSignatureReason?: string;
+  // Legacy single-item fields (for backward compatibility)
   weight?: number;
   category?: DonationCategory;
+  // New multi-item fields
+  items?: PickupItemData[];
+  totalValue?: number;
 }
 
 export interface DonationData {

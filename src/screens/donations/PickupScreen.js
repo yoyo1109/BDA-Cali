@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ListScreen from './driver/ListScreen';
 import ViewScreen from './driver/ViewScreen';
 import PickupCompleteScreen from './driver/PickupCompleteScreen';
+import PickupCompleteScreenV2 from './driver/PickupCompleteScreenV2';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +26,11 @@ const PickupScreen = () => {
             <Stack.Screen
                 name='PickupComplete'
                 component={PickupCompleteScreen}
+                options={{ title: 'Complete Pickup' }}
+            />
+            <Stack.Screen
+                name='PickupCompleteV2'
+                component={PickupCompleteScreenV2}
                 options={{ title: 'Complete Pickup' }}
             />
         </Stack.Navigator>
