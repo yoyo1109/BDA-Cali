@@ -13,6 +13,7 @@
     "seed:warehouses": "node scripts/seedWarehouses.js",
     "seed:driver-pickups": "node scripts/seedDriverPickups.js",
     "delete:drivers": "node scripts/deleteDrivers.js",
+    "add:access-notes": "node scripts/addAccessNotes.js",
     "postinstall": "patch-package"
   },
   "dependencies": {
