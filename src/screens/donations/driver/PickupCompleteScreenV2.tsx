@@ -23,7 +23,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { deleteDoc, doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
-import { app, db } from '../../../firebase/config';
+import { app, db, auth } from '../../../firebase/config';
 import LoadingModal from '../../../../components/LoadingModal';
 import PickupItemsListV3 from '../../../components/PickupItemsListV3';
 import { AccessInfoCard } from '../../../components/pickup';
@@ -34,6 +34,7 @@ import {
   PickupItemData,
 } from '../../../types/pickup.types';
 import { PickupItem } from '../../../types/pickupItem.types';
+import { scanReceipt, OCRResult } from '../../../services/ocrService';
 
 interface PickupFormValues {
   hasReceipt: 'yes' | 'no';
@@ -62,6 +63,8 @@ const PickupCompleteScreenV2: React.FC<PickupCompleteScreenProps> = ({
   const [signature, setSignature] = useState<string | null>(null);
   const [loading, setLoadingInternal] = useState(false);
   const [signatureVisible, setSignatureVisible] = useState(false);
+  const [isProcessingOCR, setIsProcessingOCR] = useState(false);
+  const [ocrResult, setOcrResult] = useState<OCRResult | null>(null);
 
   // Wrapper to track loading state changes
   const setLoading = (value: boolean) => {
@@ -151,6 +154,63 @@ const PickupCompleteScreenV2: React.FC<PickupCompleteScreenProps> = ({
     } catch (error) {
       console.error('[PickupCompleteV2] Upload error:', error);
       Alert.alert('Error', 'Failed to upload photo');
+    }
+  };
+
+  const handleScanReceipt = async () => {
+    if (!image) {
+      Alert.alert('Error', 'Please capture a receipt photo first');
+      return;
+    }
+
+    setIsProcessingOCR(true);
+    setLoading(true);
+
+    try {
+      const userId = auth.currentUser?.uid || 'anonymous';
+      console.log('[PickupCompleteV2] Starting OCR scan...');
+
+      const result = await scanReceipt(image, userId);
+      setOcrResult(result);
+
+      console.log('[PickupCompleteV2] OCR scan completed:', result.itemCount, 'items found');
+
+      // Auto-populate items if confidence is reasonable
+      if (result.overallConfidence > 0.7 && result.items.length > 0) {
+        setItems(result.items);
+
+        Alert.alert(
+          'Receipt Scanned Successfully',
+          `Found ${result.items.length} item(s) with ${(result.overallConfidence * 100).toFixed(0)}% confidence.\n\nPlease review and edit if needed.`,
+          [{ text: 'OK' }]
+        );
+      } else if (result.items.length > 0) {
+        // Low confidence - ask user
+        Alert.alert(
+          'Low Confidence Scan',
+          `Found ${result.items.length} item(s) but confidence is low (${(result.overallConfidence * 100).toFixed(0)}%).\n\nWould you like to use the scanned data or enter manually?`,
+          [
+            { text: 'Use Scanned Data', onPress: () => setItems(result.items) },
+            { text: 'Enter Manually', style: 'cancel' }
+          ]
+        );
+      } else {
+        Alert.alert(
+          'No Items Found',
+          'Could not extract items from receipt. Please enter manually.',
+          [{ text: 'OK' }]
+        );
+      }
+    } catch (error: any) {
+      console.error('[PickupCompleteV2] OCR scan error:', error);
+      Alert.alert(
+        'Scan Failed',
+        error.message || 'Could not scan receipt. Please enter items manually.',
+        [{ text: 'OK' }]
+      );
+    } finally {
+      setIsProcessingOCR(false);
+      setLoading(false);
     }
   };
 
@@ -822,6 +882,38 @@ const PickupCompleteScreenV2: React.FC<PickupCompleteScreenProps> = ({
                         <Text style={styles.photoButtonText}>Upload</Text>
                       </TouchableOpacity>
                     </View>
+
+                    {/* OCR Scan Button */}
+                    {image && (
+                      <TouchableOpacity
+                        style={styles.ocrButton}
+                        onPress={handleScanReceipt}
+                        disabled={isProcessingOCR}
+                      >
+                        <Icon
+                          name={isProcessingOCR ? "loading" : "text-recognition"}
+                          size={20}
+                          color={COLORS.white}
+                        />
+                        <Text style={styles.ocrButtonText}>
+                          {isProcessingOCR ? 'Scanning...' : 'Scan Receipt to Auto-Fill Items'}
+                        </Text>
+                      </TouchableOpacity>
+                    )}
+
+                    {/* Confidence Badge */}
+                    {ocrResult && (
+                      <View style={styles.confidenceBadge}>
+                        <Icon
+                          name={ocrResult.overallConfidence > 0.85 ? "check-circle" : "alert-circle"}
+                          size={16}
+                          color={ocrResult.overallConfidence > 0.85 ? COLORS.success : COLORS.warning}
+                        />
+                        <Text style={styles.confidenceText}>
+                          Scan Confidence: {(ocrResult.overallConfidence * 100).toFixed(0)}%
+                        </Text>
+                      </View>
+                    )}
                   </View>
                 ) : (
                   <View style={styles.reasonSection}>
@@ -1163,6 +1255,37 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     marginLeft: SPACING.sm,
     letterSpacing: 0.5,
+  },
+  ocrButton: {
+    flexDirection: 'row',
+    backgroundColor: COLORS.orange,
+    padding: SPACING.md,
+    borderRadius: BORDER_RADIUS.sm,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: SPACING.md,
+    ...SHADOWS.button,
+  },
+  ocrButtonText: {
+    color: COLORS.white,
+    fontSize: FONT_SIZES.md,
+    fontWeight: '600',
+    marginLeft: SPACING.sm,
+  },
+  confidenceBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: SPACING.sm,
+    padding: SPACING.sm,
+    backgroundColor: COLORS.background,
+    borderRadius: BORDER_RADIUS.sm,
+  },
+  confidenceText: {
+    fontSize: FONT_SIZES.sm,
+    fontWeight: '600',
+    color: COLORS.darkBlue,
+    marginLeft: SPACING.xs,
   },
 });
 

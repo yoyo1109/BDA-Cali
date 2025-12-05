@@ -17,6 +17,8 @@ export interface PickupItem {
   packaging: PackagingDetail[]; // Array of packaging types
   totalWeight: string;          // Manual weight input in lbs (string for TextInput)
   totalValue: string;           // Calculated/editable total value in $ (string for TextInput)
+  confidence?: number;          // Optional OCR confidence score (0-1)
+  rawText?: string;             // Optional raw OCR text for debugging
 }
 
 // Firestore model for saved data

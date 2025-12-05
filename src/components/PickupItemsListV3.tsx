@@ -154,6 +154,39 @@ const PickupItemsListV3: React.FC<PickupItemsListProps> = ({
             )}
           </View>
 
+          {/* Confidence Badge (OCR) */}
+          {item.confidence !== undefined && (
+            <View style={[
+              styles.confidenceBadge,
+              item.confidence >= 0.85 ? styles.confidenceBadgeHigh :
+              item.confidence >= 0.75 ? styles.confidenceBadgeMedium :
+              styles.confidenceBadgeLow
+            ]}>
+              <Icon
+                name={
+                  item.confidence >= 0.85 ? "check-circle" :
+                  item.confidence >= 0.75 ? "alert-circle" :
+                  "alert"
+                }
+                size={16}
+                color={
+                  item.confidence >= 0.85 ? "#22C55E" :
+                  item.confidence >= 0.75 ? "#F59E0B" :
+                  "#EF4444"
+                }
+              />
+              <Text style={[
+                styles.confidenceText,
+                item.confidence >= 0.85 ? styles.confidenceTextHigh :
+                item.confidence >= 0.75 ? styles.confidenceTextMedium :
+                styles.confidenceTextLow
+              ]}>
+                OCR: {(item.confidence * 100).toFixed(0)}% confidence
+                {item.confidence < 0.75 && ' - Please verify'}
+              </Text>
+            </View>
+          )}
+
           {/* Category Input */}
           <View style={styles.fieldContainer}>
             <Text style={styles.fieldLabel}>Category</Text>
@@ -678,6 +711,42 @@ const styles = StyleSheet.create({
   modalOptionText: {
     fontSize: 16,
     color: '#1A2B45',
+  },
+  // Confidence Badge Styles
+  confidenceBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 6,
+    marginBottom: 12,
+    borderWidth: 1,
+  },
+  confidenceBadgeHigh: {
+    backgroundColor: '#F0FDF4',
+    borderColor: '#22C55E',
+  },
+  confidenceBadgeMedium: {
+    backgroundColor: '#FFFBEB',
+    borderColor: '#F59E0B',
+  },
+  confidenceBadgeLow: {
+    backgroundColor: '#FEF2F2',
+    borderColor: '#EF4444',
+  },
+  confidenceText: {
+    fontSize: 12,
+    fontWeight: '600',
+    marginLeft: 6,
+  },
+  confidenceTextHigh: {
+    color: '#22C55E',
+  },
+  confidenceTextMedium: {
+    color: '#F59E0B',
+  },
+  confidenceTextLow: {
+    color: '#EF4444',
   },
 });
 
